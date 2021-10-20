@@ -1,0 +1,83 @@
+Turbo Assembler	 Version 3.1	    10/19/21 23:35:12	    Page 1
+sample.asm
+
+
+
+      1				     ; Лабораторная работа 4 вариант 2
+      2	0000			     model SMALL
+      3	0000			     stack 100h
+      4
+      5	0000			     dataseg
+      6	0000  ????			     answ    dw	?
+      7	0002  EF EF EF EF 65 79	73+	     p_key   db	"яяяяeystring";
+      8	      74 72 69 6E 67
+      9
+     10
+     11	000E				     codeseg
+     12				     startupcode
+1    13	0000			     @Startup:
+1    14	0000  BA 0000s			     MOV     DX,@data
+1    15	0003  8E DA			     MOV     DS,DX
+1    16	0005  8C D3			     MOV     BX,SS
+1    17	0007  2B DA			     SUB     BX,DX
+1    18	0009  D1 E3 D1 E3 D1 E3	D1+	     SHL     BX,4
+     19	      E3
+1    20	0011  FA			     CLI
+1    21	0012  8E D2			     MOV     SS,DX
+1    22	0014  03 E3			     ADD     SP,BX
+1    23	0016  FB			     STI
+     24					     ;ввод строки
+     25
+     26	0017  BD 0002r				     lea BP, p_key
+     27	001A  33 FF				     xor DI, DI
+     28	001C  8B 03				     mov AX, [BP][DI]
+     29	001E  B9 0005				     mov CX, 5h
+     30	0021			     loop1:
+     31	0021  47				     inc DI
+     32	0022  47				     inc DI
+     33	0023  8B 13				     mov DX, [BP][DI]
+     34	0025  03 C2				     add AX, DX
+     35	0027  15 0000				     adc AX, 0
+     36	002A  E2 F5				     loop loop1
+     37
+     38	002C  A3 0000r				     mov answ, AX
+     39					     exitcode 0
+1    40	002F  B8 4C00			     MOV     AX,04C00h
+1    41	0032  CD 21			     INT     21h
+     42				     end
+Turbo Assembler	 Version 3.1	    10/19/21 23:35:12	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "10/19/21"
+??FILENAME			  Text	 "sample  "
+??TIME				  Text	 "23:35:12"
+??VERSION			  Number 030A
+@32BIT				  Text	 0
+@CODE				  Text	 _TEXT
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 SAMPLE
+@INTERFACE			  Text	 00H
+@MODEL				  Text	 2
+@STACK				  Text	 DGROUP
+@STARTUP			  Near	 _TEXT:0000
+@WORDSIZE			  Text	 2
+ANSW				  Word	 DGROUP:0000
+LOOP1				  Near	 _TEXT:0021
+P_KEY				  Byte	 DGROUP:0002
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  STACK				  16  0100 Para	  Stack	  STACK
+  _DATA				  16  000E Word	  Public  DATA
+_TEXT				  16  0034 Word	  Public  CODE
+
